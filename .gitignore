@@ -7,3 +7,6 @@ build/
 coverage/
 .firebase/
 
+# Firebase service account (sensitive credentials)
+firebase-service-account.json
+*.firebase-service-account.json
