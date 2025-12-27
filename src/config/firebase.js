@@ -23,17 +23,32 @@ export function initializeFirebase() {
             return firebaseApp;
         }
 
-        // Get path to service account JSON
-        const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
-        
-        if (!serviceAccountPath) {
-            throw new Error('FIREBASE_SERVICE_ACCOUNT_PATH is not set in environment variables');
-        }
+        let serviceAccount;
 
-        // Read service account credentials
-        const serviceAccount = JSON.parse(
-            readFileSync(serviceAccountPath, 'utf8')
-        );
+        // Option 1: Read from environment variable (for Railway/production)
+        // This is the preferred method for deployment
+        if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+            try {
+                serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+                console.log('Firebase credentials loaded from environment variable');
+            } catch (parseError) {
+                throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON is not valid JSON');
+            }
+        }
+        // Option 2: Read from file (for local development)
+        else if (process.env.FIREBASE_SERVICE_ACCOUNT_PATH) {
+            try {
+                serviceAccount = JSON.parse(
+                    readFileSync(process.env.FIREBASE_SERVICE_ACCOUNT_PATH, 'utf8')
+                );
+                console.log('Firebase credentials loaded from file');
+            } catch (fileError) {
+                throw new Error(`Failed to read Firebase service account file: ${fileError.message}`);
+            }
+        }
+        else {
+            throw new Error('Either FIREBASE_SERVICE_ACCOUNT_JSON or FIREBASE_SERVICE_ACCOUNT_PATH must be set');
+        }
 
         // Initialize Firebase Admin
         firebaseApp = admin.initializeApp({
