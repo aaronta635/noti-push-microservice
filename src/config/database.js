@@ -5,10 +5,21 @@ dotenv.config();
 
 const { Pool } = pg;
 
+// Get database URL from environment
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+    console.error('DATABASE_URL is not set in environment variables');
+} else {
+    // Log connection string (mask password for security)
+    const maskedUrl = databaseUrl.replace(/:([^:@]+)@/, ':****@');
+    console.log('Database URL:', maskedUrl);
+}
+
 // Create connection pool
 // Connection pooling helps manage multiple database connections efficiently
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: databaseUrl,
     // These settings help with connection management
     max: 20, // Maximum number of clients in the pool
     idleTimeoutMillis: 30000, // Close idle clients after 30 seconds

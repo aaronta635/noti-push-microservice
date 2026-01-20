@@ -1,6 +1,6 @@
 import { findTokensByUserId, getAllDeviceTokens } from '../models/DeviceToken.js';
 import { createNotiHistory } from '../models/NotificationHistory.js';
-import { sendBatchNotifications } from './fcmService.js';
+import { sendBatchNotifications } from './expoService.js';
 import logger from '../utils/logger.js';
 
 /**

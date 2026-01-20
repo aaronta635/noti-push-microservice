@@ -1,5 +1,6 @@
 // Test script for Notification Service API
 // Run with: node test-api.js
+// Or with Railway URL: BASE_URL=https://noti-push-microservice-production.up.railway.app node test-api.js
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 
